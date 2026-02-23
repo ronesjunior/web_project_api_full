@@ -1,0 +1,16 @@
+.main {
+  flex-shrink: 0;
+  flex-grow: 1;
+  padding-top: 40px;
+}
+
+.nome-error,
+.sobre-error,
+.link-error,
+.titulo-error,
+.avatar-error {
+  color: #ff0000;
+  font-size: 11px;
+  min-height: 11px;
+  display: block;
+}

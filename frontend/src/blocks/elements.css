@@ -1,0 +1,100 @@
+.elements,
+.elements-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, 282px);
+  column-gap: 17px;
+  row-gap: 21px;
+  justify-content: center;
+  padding-bottom: 17px;
+}
+
+.element {
+  position: relative;
+}
+
+.element__image {
+  width: 100%;
+  object-fit: cover;
+  aspect-ratio: 1 / 1; /* mantém quadrado responsivo */
+  border: 1.5px solid #000;
+  border-radius: 10px 10px 0 0;
+}
+
+.element__image:hover {
+  cursor: pointer;
+}
+
+.element__description {
+  display: flex;
+  padding-top: 25px;
+  padding-bottom: 31px;
+  color: black;
+  align-self: center;
+  justify-content: space-between;
+  background-color: white;
+  border: 1.5px solid #000;
+  border-radius: 0 0 10px 10px;
+  max-width: 100%;
+  width: 100%;
+}
+
+.element__like-button {
+  border: none;
+  background: transparent;
+  margin-right: 18px;
+  padding: 0;
+  align-self: center;
+  margin-left: 15px;
+}
+
+.element__like-icon {
+  width: 22px;
+  height: 19px;
+  display: block;
+  cursor: pointer;
+}
+
+.element__like-icon:hover {
+  opacity: 0.5;
+}
+
+.element__like-icon_active {
+  background: url("../images/like_button_black.png") center no-repeat;
+  background-size: contain;
+}
+
+.element__title {
+  margin: 0;
+  font-family: "Inter", sans-serif;
+  font-weight: 900;
+  font-size: 24px;
+  line-height: 100%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 200px;
+  height: 30px;
+  margin-left: 21px;
+}
+
+.element__delete-button {
+  background-size: contain;
+  border: none;
+  cursor: pointer;
+  background-color: transparent;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  transition: opacity 0.2s ease;
+}
+
+.element__lixeira-icon {
+  width: 18px;
+  height: 19px;
+  display: block;
+  cursor: pointer;
+}
+
+.element__lixeira-icon:hover {
+  opacity: 0.6;
+}

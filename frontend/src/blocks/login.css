@@ -1,0 +1,36 @@
+.login {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.login__titulo {
+  color: white;
+  font-weight: 900;
+  font-size: 24px;
+  margin-top: 60px;
+  margin-bottom: 50px;
+}
+
+.login__signin-link {
+  color: white;
+  text-decoration: none;
+  margin-top: 15px;
+}
+
+.login__signin-link:hover {
+  opacity: 60%;
+}
+
+@media screen and (max-width: 544px) {
+  .login__signin-link {
+    font-size: 12px;
+    margin-top: 20px;
+  }
+
+  .login__titulo {
+    font-size: 20px;
+    margin-top: 40px;
+    margin-bottom: 40px;
+  }
+}
