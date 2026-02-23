@@ -30,24 +30,34 @@ module.exports.createCard = (req, res) => {
 };
 
 module.exports.delCard = (req, res) => {
-  const { id } = req.params;
-  console.log(req);
+  const { cardId } = req.params;
 
-  Card.findByIdAndDelete(id)
+  Card.findById(cardId)
     .orFail()
-    .then((card) => res.send(card))
+    .then((card) => {
+      // checa dono
+      if (String(card.owner) !== String(req.user._id)) {
+        return res
+          .status(403)
+          .send({ message: 'Você não pode deletar este card' });
+      }
+
+      return Card.findByIdAndDelete(cardId).then((deleted) =>
+        res.send(deleted),
+      );
+    })
     .catch((err) => {
       if (err.name === 'CastError') {
         return res.status(ERROR_CODE).send({ message: 'ID inválido' });
       }
-
       if (err.name === 'DocumentNotFoundError') {
         return res
           .status(DOCUMENT_NOTFOUND)
           .send({ message: 'Card não encontrado' });
       }
-
-      res.status(ERROR_GENERAL).send({ message: 'Erro interno do servidor' });
+      return res
+        .status(ERROR_GENERAL)
+        .send({ message: 'Erro interno do servidor' });
     });
 };
 
@@ -55,7 +65,7 @@ module.exports.likeCard = (req, res) => {
   Card.findByIdAndUpdate(
     req.params.cardId,
     { $addToSet: { likes: req.user._id } },
-    { new: true }
+    { new: true, runValidators: true },
   )
     .orFail()
     .then((card) => res.send(card))
@@ -71,7 +81,7 @@ module.exports.dislikeCard = (req, res) => {
   Card.findByIdAndUpdate(
     req.params.cardId,
     { $pull: { likes: req.user._id } },
-    { new: true }
+    { new: true, runValidators: true },
   )
     .orFail()
     .then((card) => res.send(card))
