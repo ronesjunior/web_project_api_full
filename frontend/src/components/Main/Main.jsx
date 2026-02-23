@@ -90,10 +90,13 @@ function Main({
 
       <div className="elements">
         {cards.map((card) => {
+          const isLiked = card.likes?.some(
+            (id) => String(id) === String(currentUser?._id),
+          );
           return (
             <Card
               key={card._id}
-              card={card}
+              card={{ ...card, isLiked }}
               onImageClick={handleImageClick}
               onCardLike={onCardLike}
               onCardDelete={onCardDelete}

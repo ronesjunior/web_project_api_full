@@ -34,6 +34,7 @@ export default function App() {
     api
       .getInitialCards()
       .then((res) => {
+        console.log("olá");
         setCards(res); // variável cards recebe o res
       })
       .catch((err) => console.error("Erro ao buscar cards:", err));
@@ -54,19 +55,32 @@ export default function App() {
   }, [navigate]);
 
   useEffect(() => {
+    if (!isLoggedIn) return;
+
     api
       .getUserInfo()
       .then((userData) => {
-        setCurrentUser(userData);
+        console.log("getUserInfo retornou:", userData);
+        setCurrentUser((prev) => ({ ...prev, ...userData })); // melhor: mescla
       })
-      .catch((err) => {
-        console.error("Erro ao buscar dados do usuário:", err);
-      });
-  }, []);
+      .catch((err) => console.error("Erro ao buscar dados do usuário:", err));
+  }, [isLoggedIn]);
 
   function handleCardLike(card) {
+    const isLiked = card.likes?.some(
+      (id) => String(id) === String(currentUser?._id),
+    );
+    console.log(
+      "card.likes =",
+      card.likes,
+      "tipo =",
+      typeof card.likes,
+      "éArray?",
+      Array.isArray(card.likes),
+    );
+    console.log("currentUser._id =", currentUser?._id);
     api
-      .changeLikeCardStatus(card._id, !card.isLiked)
+      .changeLikeCardStatus(card._id, !isLiked)
       .then((newCard) => {
         // recebe a promisse 'res' resolvida e após isso executa a resolução da promisse'newCard' que é o objeto com o _id, name, link, isLiked... de 01 card que veio resolvida da API 'changeLikeCardStatus'
         setCards(

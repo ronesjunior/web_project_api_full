@@ -191,6 +191,7 @@ class Api {
 /// Cria e exporta uma constante 'api' que contém uma instância da classe 'Api' acima para buscar dados de uma API
 export const api = new Api({
   baseUrl: "https://backend-2xrp.onrender.com",
+  // baseUrl: "http://localhost:5001",
   headers: {
     "Content-Type": "application/json",
   },
