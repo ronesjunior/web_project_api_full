@@ -37,7 +37,7 @@ class AuthApi {
 
 /// Cria e exporta uma constante 'api' que contém uma instância da classe 'Api' acima para buscar dados de uma API
 export const auth = new AuthApi({
-  baseUrl: "https://sprint18.onrender.com",
+  baseUrl: "https://backend-2xrp.onrender.com",
   headers: {
     "Content-Type": "application/json",
   },
