@@ -8,6 +8,8 @@ import EditProfile from "../EditProfile/EditProfile.jsx";
 import EditAvatar from "../EditAvatar/EditAvatar.jsx";
 import ImagePopup from "../ImagePopup/ImagePopup.jsx";
 import Card from "../Card/Card.jsx";
+import { api } from "../../utils/api.js";
+import { useState, useEffect } from "react";
 
 // IMPORTAR O CONTEXTO
 import CurrentUserContext from "../../contexts/CurrentUserContext.js";
@@ -19,6 +21,7 @@ function Main({
   onClosePopup,
   setSelectedImage,
   cards,
+  setCards,
   onCardLike,
   onCardDelete,
 }) {
@@ -31,6 +34,15 @@ function Main({
     title: "Alterar a foto do perfil",
     children: <EditAvatar />,
   };
+
+  useEffect(() => {
+    api
+      .getInitialCards()
+      .then((res) => {
+        setCards(res); // variável cards recebe o res
+      })
+      .catch((err) => console.error("Erro ao buscar cards:", err));
+  }, []);
 
   function handleImageClick(card) {
     setSelectedImage(card);

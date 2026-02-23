@@ -24,21 +24,11 @@ export default function App() {
 
   const [selectedImage, setSelectedImage] = useState(null);
 
-  const [cards, setCards] = useState([]);
-
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const navigate = useNavigate();
+  const [cards, setCards] = useState([]);
 
-  useEffect(() => {
-    api
-      .getInitialCards()
-      .then((res) => {
-        console.log("olá");
-        setCards(res); // variável cards recebe o res
-      })
-      .catch((err) => console.error("Erro ao buscar cards:", err));
-  }, []);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const jwt = getToken();
@@ -47,7 +37,7 @@ export default function App() {
       return;
     }
     auth.getUserAuth(jwt).then((response) => {
-      const email = { email: response.data.email };
+      const email = { email: response.email };
       setCurrentUser((prevData) => ({ ...prevData, ...email }));
       setIsLoggedIn(true);
       navigate("/");
@@ -233,6 +223,7 @@ export default function App() {
                     onClosePopup={handleClosePopup}
                     setSelectedImage={setSelectedImage}
                     cards={cards}
+                    setCards={setCards}
                     onCardLike={handleCardLike}
                     onCardDelete={handleCardDelete}
                   />
