@@ -2,6 +2,8 @@
 
 ### <u>FRONTEND:</u>
 
+site: https://web-project-api-full-flax.vercel.app/
+
 Aplicação frontend desenvolvida com React, integrada a uma API REST para gerenciamento de usuários e cards, com autenticação via JWT.
 
 ### Funcionalidades
