@@ -39,6 +39,12 @@ router.post('/signup', ValidateSignup, createUser);
 /* ========================
    ROTAS PROTEGIDAS
 ======================== */
+
+console.log('types:', {
+  auth: typeof auth,
+  ValidateUserId: typeof ValidateUserId,
+  idUser: typeof idUser,
+});
 router.get('/me', auth, getUser);
 
 router.get('/:id', auth, ValidateUserId, idUser);
