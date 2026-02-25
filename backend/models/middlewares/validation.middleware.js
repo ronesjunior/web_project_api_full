@@ -68,3 +68,10 @@ module.exports.ValidateUpdateAvatar = celebrate({
     })
     .required(),
 });
+
+// Validar ID do usuário
+module.exports.ValidateUserId = celebrate({
+  params: Joi.object().keys({
+    id: Joi.string().hex().length(24).required(),
+  }),
+});
