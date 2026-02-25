@@ -52,7 +52,7 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.options('*', cors(corsOptions));
+app.options(/.*/, cors(corsOptions));
 
 /* ========================
    ROTAS
@@ -63,7 +63,7 @@ app.use('/cards', cardRoute);
 /* ========================
    ROTA NÃO ENCONTRADA
 ======================== */
-app.use('*', (req, res) => {
+app.use(/.*/, (req, res) => {
   res.status(404).send({ message: 'Rota não encontrada' });
 });
 
