@@ -103,66 +103,47 @@ module.exports.idUser = (req, res) => {
 };
 
 module.exports.delUser = (req, res) => {
-  const { id } = req.params;
+  const id = req.user._id;
 
   User.findByIdAndDelete(id)
     .orFail()
     .then((user) => res.send(user))
     .catch((err) => {
-      if (err.name === 'CastError') {
-        return res.status(ERROR_CODE).send({ message: 'ID inválido' });
-      }
-
       if (err.name === 'DocumentNotFoundError') {
         return res
           .status(DOCUMENT_NOTFOUND)
           .send({ message: 'Usuário não encontrado' });
       }
-
-      res.status(ERROR_GENERAL).send({ message: 'Erro interno do servidor' });
+      return res
+        .status(ERROR_GENERAL)
+        .send({ message: 'Erro interno do servidor' });
     });
 };
 
-module.exports.updateMe = (req, res) => {
+module.exports.updateMe = (req, res, next) => {
   const { name, about } = req.body;
-  const { id } = req.params;
 
-  User.findByIdAndUpdate(id, { name, about }, { new: true })
+  User.findByIdAndUpdate(
+    req.user._id,
+    { name, about },
+    { new: true, runValidators: true },
+  )
+    .select('-password')
     .orFail()
     .then((user) => res.send(user))
-    .catch((err) => {
-      if (err.name === 'CastError') {
-        return res.status(ERROR_CODE).send({ message: 'ID inválido' });
-      }
-
-      if (err.name === 'DocumentNotFoundError') {
-        return res
-          .status(DOCUMENT_NOTFOUND)
-          .send({ message: 'Usuário não encontrado' });
-      }
-
-      res.status(ERROR_GENERAL).send({ message: 'Erro interno do servidor' });
-    });
+    .catch(next);
 };
 
-module.exports.updateAvatar = (req, res) => {
-  const { id } = req.params;
+module.exports.updateAvatar = (req, res, next) => {
   const { avatar } = req.body;
 
-  User.findByIdAndUpdate(id, { avatar }, { new: true })
+  User.findByIdAndUpdate(
+    req.user._id,
+    { avatar },
+    { new: true, runValidators: true },
+  )
+    .select('-password')
     .orFail()
     .then((user) => res.send(user))
-    .catch((err) => {
-      if (err.name === 'CastError') {
-        return res.status(ERROR_CODE).send({ message: 'ID inválido' });
-      }
-
-      if (err.name === 'DocumentNotFoundError') {
-        return res
-          .status(DOCUMENT_NOTFOUND)
-          .send({ message: 'Avatar não encontrado' });
-      }
-
-      res.status(ERROR_GENERAL).send({ message: 'Erro interno do servidor' });
-    });
+    .catch(next);
 };

@@ -50,7 +50,6 @@ export default function App() {
     api
       .getUserInfo()
       .then((userData) => {
-        console.log("getUserInfo retornou:", userData);
         setCurrentUser((prev) => ({ ...prev, ...userData })); // melhor: mescla
       })
       .catch((err) => console.error("Erro ao buscar dados do usuário:", err));

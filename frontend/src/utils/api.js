@@ -91,21 +91,13 @@ class Api {
         ...this._headers,
         Authorization: `Bearer ${localStorage.getItem("jwt")}`,
       },
-    })
-      .then((res) => {
-        if (!res.ok) {
-          return Promise.reject(`Erro HTTP ao excluir card: ${res.status}`);
-        }
-        return res.json();
-      })
-      .then((data) => {
-        return data;
-      })
-      .catch((err) => {
-        console.error("Erro ao excluir card:", err);
-      });
+    }).then((res) => {
+      if (!res.ok) {
+        return Promise.reject(`Erro HTTP ao excluir card: ${res.status}`);
+      }
+      return res.json(); // ou res.text() se você mandar só message
+    });
   }
-
   // Descurtir um cartão
   unlikeCard(cardId) {
     return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
@@ -190,8 +182,8 @@ class Api {
 
 /// Cria e exporta uma constante 'api' que contém uma instância da classe 'Api' acima para buscar dados de uma API
 export const api = new Api({
-  baseUrl: "https://backend-2xrp.onrender.com",
-  // baseUrl: "http://localhost:5001",
+  // baseUrl: "https://backend-2xrp.onrender.com",
+  baseUrl: "http://localhost:5001",
   headers: {
     "Content-Type": "application/json",
   },
