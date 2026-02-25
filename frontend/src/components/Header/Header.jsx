@@ -47,21 +47,21 @@ export default function Header() {
     );
   }
 
-  if (location.pathname === "/signup") {
-    headerLink = (
-      <Link className="header__button" to="/signin">
-        Faça o login
-      </Link>
-    );
-  }
+  // if (location.pathname === "/signup") {
+  //   headerLink = (
+  //     <Link className="header__button" to="/signin">
+  //       Faça o login
+  //     </Link>
+  //   );
+  // }
 
-  if (location.pathname === "/signin") {
-    headerLink = (
-      <Link className="header__button" to="/signin">
-        Entrar
-      </Link>
-    );
-  }
+  // if (location.pathname === "/signin") {
+  //   headerLink = (
+  //     <Link className="header__button" to="/signin">
+  //       Entrar
+  //     </Link>
+  //   );
+  // }
 
   function signOut() {
     localStorage.removeItem("jwt"); // remove o localstorage da memória do browser
