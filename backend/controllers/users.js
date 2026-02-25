@@ -42,28 +42,27 @@ module.exports.createUser = (req, res, next) => {
 
   bcrypt
     .hash(password, 10)
-    .then((hash) => {
-      return User.create({
+    .then((hash) =>
+      User.create({
         name,
         about,
         avatar,
         email,
-        password: hash, // 👈 agora salva a senha criptografada
-      });
-    })
-    .then((user) => {
-      console.log('Usuário criado com sucesso:', user);
-      res.send(user);
+        password: hash,
+      }),
+    )
+    .then((user) => User.findById(user._id).select('-password'))
+    .then((userWithoutPassword) => {
+      res.status(201).send(userWithoutPassword);
     })
     .catch((err) => {
-      if (err.name === 'ValidationError') {
-        console.log('Erro ao tentar criar o usuário:', err);
-        return res
-          .status(ERROR_CODE)
-          .send({ message: 'Dados inválidos para criação do usuário' });
+      // 🔥 Email duplicado
+      if (err.code === 11000) {
+        err.statusCode = 409;
+        err.message = 'Email já cadastrado';
       }
 
-      res.status(ERROR_GENERAL).send({ message: 'Erro interno do servidor' });
+      next(err);
     });
 };
 

@@ -25,7 +25,7 @@ module.exports.createCard = (req, res) => {
     });
 };
 
-module.exports.delCard = (req, res, next) => {
+module.exports.deleteCard = (req, res, next) => {
   const { cardId } = req.params;
 
   Card.findById(cardId)
@@ -63,7 +63,9 @@ module.exports.likeCard = (req, res) => {
     .then((card) => res.send(card))
     .catch((err) => {
       if (err.name === 'DocumentNotFoundError') {
-        return res.status(ERROR_CODE).send({ message: 'Card não encontrado' });
+        return res
+          .status(DOCUMENT_NOTFOUND)
+          .send({ message: 'Card não encontrado' });
       }
       res.status(ERROR_GENERAL).send({ message: err.message });
     });
@@ -79,7 +81,9 @@ module.exports.dislikeCard = (req, res) => {
     .then((card) => res.send(card))
     .catch((err) => {
       if (err.name === 'DocumentNotFoundError') {
-        return res.status(ERROR_CODE).send({ message: 'Card não encontrado' });
+        return res
+          .status(DOCUMENT_NOTFOUND)
+          .send({ message: 'Card não encontrado' });
       }
       res.status(ERROR_GENERAL).send({ message: err.message });
     });
