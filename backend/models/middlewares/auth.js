@@ -4,22 +4,17 @@ const jwt = require('jsonwebtoken');
 
 module.exports = (req, res, next) => {
   const { authorization } = req.headers;
-
   if (!authorization || !authorization.startsWith('Bearer ')) {
-    const err = new Error('Token não fornecido');
-    err.statusCode = 401;
-    return next(err);
+    return res.status(403).send({ message: 'Não autorizado' });
   }
 
   const token = authorization.replace('Bearer ', '');
-
+  let payload;
   try {
-    const payload = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = payload;
-    return next();
+    payload = jwt.verify(token, process.env.JWT_SECRET);
   } catch (error) {
-    const err = new Error('Token inválido');
-    err.statusCode = 401;
-    return next(err);
+    return res.status(403).send({ message: 'Não autorizado' });
   }
+  req.user = payload;
+  next();
 };
