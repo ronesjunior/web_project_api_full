@@ -28,7 +28,7 @@ export default function Card(props) {
       <img
         className="element__image"
         src={link}
-        alt="Imagem do card"
+        alt={`Imagem de ${name}`}
         onClick={() => onImageClick(props.card)}
       />
       <div className="element__description">

@@ -9,12 +9,18 @@ module.exports = (req, res, next) => {
   }
 
   const token = authorization.replace('Bearer ', '');
-  let payload;
-  try {
-    payload = jwt.verify(token, process.env.JWT_SECRET);
-  } catch (error) {
-    return res.status(403).send({ message: 'Não autorizado' });
+
+  // 🔹 Token vazio (ex: "Bearer ")
+  if (!token) {
+    return res.status(401).send({ message: 'Token inválido' });
   }
-  req.user = payload;
+
+  try {
+    const payload = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = payload;
+  } catch (err) {
+    return res.status(401).send({ message: 'Token inválido ou expirado' });
+  }
+
   next();
 };

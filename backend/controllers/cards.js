@@ -1,7 +1,6 @@
 const Card = require('../models/card');
 const ERROR_CODE = 400;
 const DOCUMENT_NOTFOUND = 404;
-const ERROR_GENERAL = 500;
 
 module.exports.getCards = (req, res, next) => {
   Card.find({ owner: req.user._id })
@@ -9,7 +8,7 @@ module.exports.getCards = (req, res, next) => {
     .catch(next);
 };
 
-module.exports.createCard = (req, res) => {
+module.exports.createCard = (req, res, next) => {
   const { name, link } = req.body;
   const owner = req.user._id;
 
@@ -21,11 +20,12 @@ module.exports.createCard = (req, res) => {
           .status(ERROR_CODE)
           .send({ message: 'Dados inválidos para criação do card' });
       }
-      res.status(ERROR_GENERAL).send({ message: 'Erro interno do servidor' });
+
+      return next(err); // deixa seu errorMiddleware tratar 500
     });
 };
 
-module.exports.delCard = (req, res, next) => {
+module.exports.deleteCard = (req, res, next) => {
   const { cardId } = req.params;
 
   Card.findById(cardId)
@@ -53,7 +53,7 @@ module.exports.delCard = (req, res, next) => {
     });
 };
 
-module.exports.likeCard = (req, res) => {
+module.exports.likeCard = (req, res, next) => {
   Card.findByIdAndUpdate(
     req.params.cardId,
     { $addToSet: { likes: req.user._id } },
@@ -63,13 +63,15 @@ module.exports.likeCard = (req, res) => {
     .then((card) => res.send(card))
     .catch((err) => {
       if (err.name === 'DocumentNotFoundError') {
-        return res.status(ERROR_CODE).send({ message: 'Card não encontrado' });
+        return res
+          .status(DOCUMENT_NOTFOUND)
+          .send({ message: 'Card não encontrado' });
       }
-      res.status(ERROR_GENERAL).send({ message: err.message });
+      return next(err); // deixa seu errorMiddleware tratar 500
     });
 };
 
-module.exports.dislikeCard = (req, res) => {
+module.exports.dislikeCard = (req, res, next) => {
   Card.findByIdAndUpdate(
     req.params.cardId,
     { $pull: { likes: req.user._id } },
@@ -79,8 +81,10 @@ module.exports.dislikeCard = (req, res) => {
     .then((card) => res.send(card))
     .catch((err) => {
       if (err.name === 'DocumentNotFoundError') {
-        return res.status(ERROR_CODE).send({ message: 'Card não encontrado' });
+        return res
+          .status(DOCUMENT_NOTFOUND)
+          .send({ message: 'Card não encontrado' });
       }
-      res.status(ERROR_GENERAL).send({ message: err.message });
+      return next(err); // deixa seu errorMiddleware tratar 500
     });
 };

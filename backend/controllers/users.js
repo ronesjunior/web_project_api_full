@@ -31,7 +31,6 @@ module.exports.login = (req, res, next) => {
           return res.status(200).send({ token });
         })
         .catch((error) => {
-          console.log('Erro ao tentar fazer login:', error);
           return res.status(ERROR_GENERAL).send({ message: error.message });
         });
     });
@@ -52,17 +51,24 @@ module.exports.createUser = (req, res, next) => {
       });
     })
     .then((user) => {
-      console.log('Usuário criado com sucesso:', user);
-      res.send(user);
+      res.send(user.select('-password'));
     })
     .catch((err) => {
+      // 🔹 Erro de validação (400)
       if (err.name === 'ValidationError') {
-        console.log('Erro ao tentar criar o usuário:', err);
         return res
           .status(ERROR_CODE)
           .send({ message: 'Dados inválidos para criação do usuário' });
       }
 
+      // 🔹 Email duplicado (409)
+      if (err.code === 11000) {
+        return res.status(409).send({
+          message: 'Este email já está cadastrado',
+        });
+      }
+
+      // 🔹 Erro interno (500)
       res.status(ERROR_GENERAL).send({ message: 'Erro interno do servidor' });
     });
 };

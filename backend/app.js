@@ -2,7 +2,6 @@ require('dotenv').config();
 
 const express = require('express');
 const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
 const { errors } = require('celebrate');
 const cors = require('cors');
 
@@ -17,9 +16,6 @@ const {
 const port = process.env.PORT || 3000;
 const app = express();
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
@@ -30,11 +26,33 @@ mongoose
   );
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.use(requestLogger);
 
-app.use(cors());
-app.options(/.*/, cors());
+const allowedOrigins = [
+  'https://web-project-api-full-flax.vercel.app',
+  'http://localhost:3000',
+  'http://localhost:5173',
+];
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // permite ferramentas/requests sem Origin (ex: Postman)
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      return callback(new Error(`CORS bloqueado para origem: ${origin}`));
+    },
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  }),
+);
 
 app.use('/users', userRoute);
 app.use('/cards', cardRoute);

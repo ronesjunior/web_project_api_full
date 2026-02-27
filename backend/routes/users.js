@@ -13,6 +13,8 @@ const {
 const {
   ValidateLogin,
   ValidateSignup,
+  ValidateUpdateMe,
+  ValidateUpdateAvatar,
 } = require('../models/middlewares/validation.middleware');
 
 const auth = require('../models/middlewares/auth'); // depois do usuário já AUTENTICADO, o sistema verifica a permissão (AUTORIZAÇÃO) para o usuário acessar uma rota, acessar controllers...
@@ -30,7 +32,7 @@ router.post('/signup', ValidateSignup, createUser); // Rota pública sem autoriz
 router.get('/me', auth, getUser); // Rota com proteção da API com autorização
 router.get('/:id', auth, idUser); // Rota com proteção da API com autorização
 router.delete('/me', auth, delUser); // Rota com proteção da API com autorização
-router.patch('/me', auth, updateMe); // Rota com proteção da API com autorização
-router.patch('/me/avatar', auth, updateAvatar); // Rota com proteção da API com autorização
+router.patch('/me', auth, ValidateUpdateMe, updateMe); // Rota com proteção da API com autorização
+router.patch('/me/avatar', auth, ValidateUpdateAvatar, updateAvatar); // Rota com proteção da API com autorização
 
 module.exports = router;
