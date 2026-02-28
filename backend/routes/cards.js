@@ -10,14 +10,14 @@ const {
 const auth = require('../models/middlewares/auth'); // depois do usuário já AUTENTICADO, o sistema verifica a permissão (AUTORIZAÇÃO) para o usuário acessar uma rota, acessar controllers...
 
 const {
-  ValidateCreateCard,
-  ValidateCardId,
+  validateCreateCard,
+  validateCardId,
 } = require('../models/middlewares/validation.middleware');
 
 router.get('/', auth, getCards);
-router.post('/', auth, ValidateCreateCard, createCard);
-router.delete('/:cardId', auth, ValidateCardId, deleteCard);
-router.put('/:cardId/likes', auth, ValidateCardId, likeCard);
-router.delete('/:cardId/likes', auth, ValidateCardId, dislikeCard);
+router.post('/', auth, validateCreateCard, createCard);
+router.delete('/:cardId', auth, validateCardId, deleteCard);
+router.put('/:cardId/likes', auth, validateCardId, likeCard);
+router.delete('/:cardId/likes', auth, validateCardId, dislikeCard);
 
 module.exports = router;
